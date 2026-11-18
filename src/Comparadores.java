@@ -10,6 +10,7 @@ public class Comparadores {
     // C1: Codigo ascendente usando Comparable
     public static List<Estudiante> C1(List<Estudiante> original) {
         List<Estudiante> copia = new ArrayList<>(original);
+        // Usamos el método sort de la lista, que utiliza el método compareTo de la clase Estudiante
         copia.sort(null);
         return copia;
     }
@@ -17,27 +18,21 @@ public class Comparadores {
     // C2: Nombre ascendente y codigo ascendente
     public static List<Estudiante> C2(List<Estudiante> original) {
         List<Estudiante> copia = new ArrayList<>(original);
-
-        copia.sort((e1, e2) -> {
-            int resultado = e1.getNombre().compareTo(e2.getNombre());
-
+        // Usamos un comparador lambda para ordenar por nombre y luego por código
+        copia.sort((e1, e2) -> {int resultado = e1.getNombre().compareTo(e2.getNombre());
             if (resultado == 0) {
-                resultado = e1.getCodigo().compareTo(e2.getCodigo());
-            }
-
+                resultado = e1.getCodigo().compareTo(e2.getCodigo());}
             return resultado;
         });
-
+        
         return copia;
     }
 
     // C2 alternativa: comparing y thenComparing
     public static List<Estudiante> C2Alternativo(List<Estudiante> original) {
         List<Estudiante> copia = new ArrayList<>(original);
-
-        copia.sort(
-            Comparator.comparing(Estudiante::getNombre)
-                      .thenComparing(Estudiante::getCodigo)
+        // Usamos Comparator.comparing y thenComparing para ordenar por nombre y luego por código
+        copia.sort(Comparator.comparing(Estudiante::getNombre).thenComparing(Estudiante::getCodigo)
         );
 
         return copia;
@@ -46,7 +41,7 @@ public class Comparadores {
     // C3: Nota ascendente
     public static List<Estudiante> C3(List<Estudiante> original) {
         List<Estudiante> copia = new ArrayList<>(original);
-
+        // Usamos Comparator.comparingDouble para comparar la nota
         copia.sort(Comparator.comparingDouble(Estudiante::getNota));
 
         return copia;
@@ -55,25 +50,19 @@ public class Comparadores {
     // C4: Nota descendente y nombre ascendente
     public static List<Estudiante> C4(List<Estudiante> original) {
         List<Estudiante> copia = new ArrayList<>(original);
-
-        copia.sort(
-            Comparator.comparingDouble(Estudiante::getNota)
-                      .reversed()
-                      .thenComparing(Estudiante::getNombre)
-        );
-
+        // Usamos Comparator.comparingDouble para comparar la nota en orden descendente y luego por nombre en orden ascendente
+        copia.sort(Comparator.comparingDouble(Estudiante::getNota)
+                    .reversed().thenComparing(Estudiante::getNombre));
         return copia;
     }
 
     // C5: Edad ascendente y nombre descendente
     public static List<Estudiante> C5(List<Estudiante> original) {
         List<Estudiante> copia = new ArrayList<>(original);
-
-        copia.sort(
-            Comparator.comparingInt(Estudiante::getEdad)
-                      .thenComparing(
-                          Comparator.comparing(Estudiante::getNombre)
-                                    .reversed()
+        // Usamos Comparator.comparingInt para comparar la edad en orden ascendente y luego por nombre en orden descendente
+        copia.sort(Comparator.comparingInt(Estudiante::getEdad)
+                      .thenComparing(Comparator.comparing(Estudiante::getNombre)
+                      .reversed()
                       )
         );
 
@@ -84,15 +73,12 @@ public class Comparadores {
     // nombre ascendente y codigo ascendente
     public static List<Estudiante> C6(List<Estudiante> original) {
         List<Estudiante> copia = new ArrayList<>(original);
-
-        copia.sort(
-            Comparator.comparing(Estudiante::getCarrera)
-                      .thenComparing(
-                          Comparator.comparingDouble(Estudiante::getNota)
-                                    .reversed()
-                      )
-                      .thenComparing(Estudiante::getNombre)
-                      .thenComparing(Estudiante::getCodigo)
+        // Usamos Comparator.comparing para comparar la carrera en orden ascendente, luego por nota en orden descendente, luego por nombre en orden ascendente y finalmente por código en orden ascendente
+        copia.sort(Comparator.comparing(Estudiante::getCarrera)
+                    .thenComparing(Comparator.comparingDouble(Estudiante::getNota)
+                    .reversed())
+                    .thenComparing(Estudiante::getNombre)
+                    .thenComparing(Estudiante::getCodigo)
         );
 
         return copia;
@@ -102,15 +88,19 @@ public class Comparadores {
     // nombre ascendente y codigo ascendente
     public static List<Estudiante> C7(List<Estudiante> original) {
         List<Estudiante> copia = new ArrayList<>(original);
-
-        copia.sort(
-            Comparator.comparingDouble(
-                (Estudiante e) -> e.getCarrera().equals("Computacion")
-                    ? Math.min(10.0, e.getNota() + 0.5)
-                    : e.getNota()
+        // Usamos Comparator.comparingDouble para comparar la nota ajustada en orden descendente, 
+        // luego por nombre en orden ascendente y finalmente por código en orden ascendente
+        copia.sort(Comparator.comparingDouble((Estudiante e) -> {
+                    double nota = e.getNota();
+                    // Ajustamos la nota si el estudiante es de la carrera de Computacion
+                    if (e.getCarrera().equals("Computacion")) {
+                        nota = Math.min(10.0, nota + 0.5);
+                    }
+                    return nota;
+                }
             ).reversed()
-             .thenComparing(Estudiante::getNombre)
-             .thenComparing(Estudiante::getCodigo)
+            .thenComparing(Estudiante::getNombre)
+            .thenComparing(Estudiante::getCodigo)
         );
 
         return copia;

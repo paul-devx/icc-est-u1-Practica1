@@ -8,6 +8,7 @@ public class DatosPrueba {
 
     public static List<Estudiante> crearEstudiantes() {
 
+        //Lista de estudiantes
         List<Estudiante> estudiantes = new ArrayList<>(List.of(
             new Estudiante("E014", "Ana",    20, 8.5, "Computacion"),
             new Estudiante("E003", "Luis",   19, 7.8, "Electronica"),
@@ -30,9 +31,21 @@ public class DatosPrueba {
             new Estudiante("E010", "Ana",    20, 8.5, "Computacion"),
             new Estudiante("E013", "Luis",   19, 7.8, "Electronica")
         ));
-
+        // Validar que los códigos sean únicos
+        validarCodigosUnicos(estudiantes);
         return estudiantes;
     }
+
+    // Método privado para validar que los códigos de los estudiantes sean únicos
+    private static void validarCodigosUnicos(List<Estudiante> estudiantes) {
+        for (int i = 0; i < estudiantes.size(); i++) {
+            for (int j = i + 1; j < estudiantes.size(); j++) {
+                // Comparar los códigos de los estudiantes
+                if (estudiantes.get(i).getCodigo().equals(estudiantes.get(j).getCodigo())) {
+                    throw new IllegalArgumentException(
+                            "Codigo duplicado: " + estudiantes.get(i).getCodigo());
+                }
+            }
+        }
+    }
 }
-
-
